@@ -2,9 +2,9 @@
 
 ## Should trigger
 
-- Mevcut uygulamayı referans alarak tek HTML landing page prototype'i çıkar.
-- Bu fikri önce CDN kullanan index.html prototipine dönüştür.
-- Bana sorular sor, uygun DESIGN.md araştır ve landing page prototipi yap.
+- Build a single HTML landing page prototype using the existing app as reference.
+- Turn this idea into a CDN-powered index.html prototype first.
+- Ask me questions, research a suitable DESIGN.md, and build a landing page prototype.
 - Create a single-file UI prototype from this repository before production work.
 - Explore whether screenshots or illustration should lead the product landing page.
 

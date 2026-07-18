@@ -2,14 +2,32 @@
 version: alpha
 name: "[Project design system]"
 description: "[One-sentence design thesis]"
+# Color keys follow the shadcn/tweakcn contract and map 1:1 to the
+# :root / .dark CSS variables in index.html. Both hsl() and oklch() are valid.
 colors:
-  background: "#F7F7F2"
-  surface: "#FFFFFF"
-  text: "#111318"
-  muted: "#68707C"
+  background: "#FFFFFF"
+  foreground: "#111318"
+  card: "#FFFFFF"
+  card-foreground: "#111318"
+  popover: "#FFFFFF"
+  popover-foreground: "#111318"
   primary: "#2457F5"
+  primary-foreground: "#FFFFFF"
+  secondary: "#F2F3F5"
+  secondary-foreground: "#20242B"
+  muted: "#F2F3F5"
+  muted-foreground: "#68707C"
+  accent: "#F2F3F5"
+  accent-foreground: "#20242B"
+  destructive: "#E5484D"
+  destructive-foreground: "#FFFFFF"
   border: "#DDE1E7"
+  input: "#DDE1E7"
+  ring: "#2457F5"
 typography:
+  sans: "[Body/UI font], sans-serif"
+  serif: "ui-serif, Georgia, serif"
+  mono: "[Mono font], ui-monospace, monospace"
   display:
     fontFamily: "[Display font]"
     fontSize: 64px
@@ -44,11 +62,11 @@ components:
 
 ## Colors
 
-[Roles, contrast, accent discipline, and surface behavior.]
+[Roles, contrast, accent discipline, and surface behavior. The frontmatter holds the light `:root` values; document the `.dark` overrides and how they keep WCAG AA contrast, since `index.html` ships both a light `:root` and a `.dark` theme mapped through `@theme inline`.]
 
 ## Typography
 
-[Display/body roles, line lengths, weights, and responsive behavior.]
+[Display/body roles, line lengths, weights, and responsive behavior. `sans`/`serif`/`mono` map to `--font-sans`/`--font-serif`/`--font-mono`.]
 
 ## Layout
 
@@ -56,15 +74,15 @@ components:
 
 ## Elevation & Depth
 
-[Shadows, borders, tonal layers, or flat hierarchy rules.]
+[Shadows, borders, tonal layers, or flat hierarchy rules. Map to the `--shadow-*` scale.]
 
 ## Shapes
 
-[Radius, line weight, geometry, and image framing.]
+[Radius, line weight, geometry, and image framing. `--radius` drives the `sm/md/lg/xl` scale.]
 
 ## Components
 
-[Buttons, navigation, cards, forms, tabs, and states.]
+[Buttons, navigation, cards, forms, tabs, and states, expressed with shadcn token utilities such as `bg-primary`, `text-primary-foreground`, `bg-card`, and `border`.]
 
 ## Do's and Don'ts
 

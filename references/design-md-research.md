@@ -39,6 +39,8 @@ Write a product-specific file following the official section order:
 6. Shapes
 7. Components
 8. Do's and Don'ts
-9. Research provenance
+9. Imagery and Illustration
+10. Motion
+11. Research provenance
 
 Tokens in YAML frontmatter are normative. Prose explains intent.

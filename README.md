@@ -1,10 +1,14 @@
 # frontend-ui-prototype
 
-Claude Code ve Codex için ortak, soru odaklı ve prototype-first frontend skill'i.
+A shared, question-led, prototype-first frontend skill for Claude Code and Codex.
 
-## Yeni varsayılan
+It turns a product idea, existing app, repository, screenshot, or live URL into a single self-contained `index.html` prototype — after asking the missing product questions, researching a `DESIGN.md` direction, and verifying the result in a browser. It stops at prototype handoff and never silently crosses into production.
 
-Skill doğrudan framework projesi oluşturmaz. Varsayılan prototype çıktısı yalnızca:
+The skill's instructions are written in English so it can be installed globally, but it asks questions, writes copy, and responds in the language the user is writing in.
+
+## Default output
+
+The skill does not scaffold a framework project. The default prototype output is only:
 
 ```text
 prototype/<slug>/
@@ -13,27 +17,32 @@ prototype/<slug>/
 └── Makefile
 ```
 
-- Bütün HTML, CSS, JavaScript, mock data ve inline SVG tek `index.html` içindedir.
-- Tailwind CSS browser CDN üzerinden gelir.
-- Lucide, Alpine.js veya Motion yalnızca gerçekten gerekliyse eklenir ve sürümleri sabitlenir.
-- `package.json`, `node_modules`, Vite, React, Next.js veya build adımı oluşturulmaz.
-- `Makefile`, sıfır kurulumla local server ve doğrulama komutlarını sağlar.
+- All HTML, CSS, JavaScript, mock data, and inline SVG live in a single `index.html`.
+- Tailwind CSS is loaded from the browser CDN.
+- Theming uses the shadcn/tweakcn token contract (`:root`/`.dark` + `@theme inline`), so a [tweakcn](https://tweakcn.com) export drops in directly, with light/dark support.
+- Lucide, Alpine.js, or Motion are added only when genuinely needed, with pinned versions.
+- No `package.json`, `node_modules`, Vite, React, Next.js, or build step is created.
+- The `Makefile` provides zero-install local serving and validation commands.
 
-## Skill akışı
+## Skill flow
 
-1. Mevcut context ve repository incelenir.
-2. Eksik kalan ürün kararları için en fazla yedi somut soru sorulur.
-3. Mevcut app varsa ürün gerçeği, route'lar, ekranlar, görsel dil ve gerçek özellikler çıkarılır.
-4. Resmî Google `DESIGN.md` formatı ve güncel design-system katalogları araştırılır.
-5. Yapısal olarak farklı üç tasarım yönü kullanıcıya sunulur.
-6. Kullanıcı yön seçer; “sen seç” dediyse skill gerekçeli seçim yapar.
-7. Projeye özel `DESIGN.md` oluşturulur.
-8. Screenshot, fotoğraf, generated imagery veya illustration stratejisi belirlenir.
-9. Tek `index.html` geliştirilir.
-10. Desktop, tablet ve mobile viewport'larda browser kontrolü ve en az bir revizyon yapılır.
-11. Prototype handoff'unda durulur.
+1. Read the current context and repository.
+2. Ask at most seven concrete questions for the missing product decisions.
+3. If an app exists, extract product truth, routes, screens, visual language, and real features.
+4. Research the official Google `DESIGN.md` format and current design-system catalogs.
+5. Present three structurally different design directions.
+6. The user picks a direction; if they delegate the choice, the skill chooses and justifies it.
+7. Create a project-specific `DESIGN.md`.
+8. Decide the screenshot, photography, generated-imagery, or illustration strategy.
+9. Build the single `index.html`.
+10. Verify in a browser at desktop, tablet, and mobile widths, with at least one revision.
+11. Stop at prototype handoff.
 
-## Temiz kurulum
+Research-heavy steps — repository inspection, web research, and screenshot capture — are delegated to parallel subagents when the host supports them.
+
+## Installation
+
+This is a cross-tool skill built on the shared Agent Skills format, installable for both Claude Code and Codex.
 
 ```bash
 unzip frontend-ui-prototype.zip
@@ -42,16 +51,18 @@ chmod +x scripts/*.sh
 make reinstall
 ```
 
-Bu komut önce eski `frontend-ui-prototype` symlink'lerini kaldırır, paketi doğrular ve Claude Code ile Codex'e yeniden kurar.
+`make reinstall` removes any old `frontend-ui-prototype` symlinks, validates the package, and reinstalls it for both agents.
 
-Global hedefler:
+Global targets:
 
 ```text
-~/.claude/skills/frontend-ui-prototype
-~/.agents/skills/frontend-ui-prototype
+~/.claude/skills/frontend-ui-prototype   # Claude Code
+~/.agents/skills/frontend-ui-prototype   # Codex
 ```
 
-## Diğer Make hedefleri
+> **Codex note:** Agent Skills are a recent Codex CLI feature. Older builds used a different discovery path (`~/.codex/skills/`) behind `codex --enable skills`. If the skill is not detected, verify with `codex --help` or `/skills` and update the Codex CLI.
+
+## Other make targets
 
 ```bash
 make help
@@ -65,26 +76,26 @@ make clean
 make package
 ```
 
-## Claude Code kullanımı
+## Using it in Claude Code
 
 ```text
 /frontend-ui-prototype
 ```
 
-Örnek:
+Example:
 
 ```text
 /frontend-ui-prototype
-Mevcut uygulamayı incele. Önce bana eksik ürün sorularını sor. Ardından uygun DESIGN.md yönlerini web'den araştır ve seçim için getir. Seçimden sonra bütün prototype kodunu tek index.html içinde, CDN paketleriyle üret. DESIGN.md ve Makefile ekle. Production geliştirmeye geçme.
+Inspect the existing app. Ask the missing product questions first. Then research suitable DESIGN.md directions from the web and bring them back for selection. After I choose, build the whole prototype as one index.html with CDN packages. Add DESIGN.md and a Makefile. Do not move on to production development.
 ```
 
-## Codex kullanımı
+## Using it in Codex
 
 ```text
 $frontend-ui-prototype
 ```
 
-Örnek:
+Example:
 
 ```text
 $frontend-ui-prototype inspect the existing app, ask the missing concrete questions, research three suitable DESIGN.md directions, then build the selected direction as one CDN-powered index.html with DESIGN.md and Makefile. Stop at prototype handoff.
@@ -92,7 +103,7 @@ $frontend-ui-prototype inspect the existing app, ask the missing concrete questi
 
 ## Prototype Makefile
 
-Üretilen prototype klasöründe:
+Inside the generated prototype folder:
 
 ```bash
 make serve        # http://localhost:4173
@@ -103,8 +114,12 @@ make clean
 make reset
 ```
 
-`make serve` için Node veya package manager gerekmez; Python'un standart HTTP server'ını kullanır.
+`make serve` needs no Node or package manager; it uses Python's standard HTTP server.
 
-## `frontend-design` ile ilişki
+## Relationship to `frontend-design`
 
-Anthropic'in `frontend-design` skill'i görsel kalite ve frontend estetiği için kullanılabilir. `frontend-ui-prototype` ise sorular, mevcut ürün incelemesi, `DESIGN.md` araştırması, görsel strateji, tek dosyalı prototype sözleşmesi ve browser doğrulamasını zorunlu kılar.
+Anthropic's `frontend-design` skill can be used for visual quality and frontend aesthetics. `frontend-ui-prototype` adds the question gate, existing-product inspection, `DESIGN.md` research, visual-evidence strategy, the single-file prototype contract, and browser verification.
+
+## License
+
+MIT © 2026 Furkan Colak. See [LICENSE](LICENSE).

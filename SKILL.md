@@ -77,6 +77,16 @@ Read `references/modes.md` when mode boundaries are unclear.
 
 # Workflow
 
+## Delegate research to subagents
+
+Whenever the host supports parallel subagents (for example Claude Code's Task tool or Codex subagents), delegate independent research and inspection to them, then synthesize their findings yourself. Work that parallelizes well:
+
+- repository and existing-app inspection (Phase 0 and Phase 2);
+- web research for `DESIGN.md` directions and references (Phase 3);
+- screenshot capture across routes and viewport sizes.
+
+Dispatch these as concurrent subagents, keep each task narrowly scoped, and merge the results before presenting decisions to the user. Fall back to doing the work inline when subagents are unavailable.
+
 ## Phase 0 — Read available context
 
 Before asking questions:
@@ -94,7 +104,7 @@ Before asking questions:
 
 ## Phase 1 — Mandatory question gate
 
-Ask only unanswered questions, in one compact message. Use the host's native question UI when available; otherwise ask in normal chat.
+Ask only unanswered questions, in one compact message. Use the host's native question UI when available; otherwise ask in normal chat. Ask in the user's language: this skill's instructions are English, but every user-facing message, question, and prototype copy must match the language the user is writing in.
 
 Ask no more than seven questions. Questions must request concrete decisions or facts, not abstract taste labels.
 
@@ -110,16 +120,16 @@ Cover these dimensions when they are not already known:
 
 Good question examples:
 
-- “Ziyaretçinin sayfada yapacağı ana işlem nedir?”
-- “Mevcut uygulamada referans almam gereken route hangisi?”
-- “Hero alanında gerçek ürün ekranı mı, fotoğraf mı, illustration mı öncelikli?”
-- “Kesinlikle kaçınmam gereken iki görsel yaklaşım nedir?”
+- “What is the single action a visitor should take on this page?”
+- “Which route in the existing app should I treat as the reference?”
+- “In the hero, should a real product screen, photography, or illustration lead?”
+- “Which two visual approaches must I strictly avoid?”
 
 Bad question examples:
 
-- “Nasıl bir tasarım istersiniz?”
-- “Modern olsun mu?”
-- “Renk tercihiniz?” when brand colors are already visible in the app.
+- “What kind of design would you like?”
+- “Should it be modern?”
+- “What is your color preference?” when brand colors are already visible in the app.
 
 Do not create prototype files before this gate is resolved. Exception: the user explicitly says to make all choices autonomously or supplies enough information to answer every question.
 
@@ -321,17 +331,16 @@ Never use `@latest` for package imports in the final file. Record imported packa
 
 ### Tailwind and design tokens
 
-Use `DESIGN.md` as the source of truth. Map tokens into Tailwind v4 theme variables inside:
+Use `DESIGN.md` as the source of truth and express it with the shadcn/tweakcn token contract inside one `<style type="text/tailwindcss">` block:
 
-```html
-<style type="text/tailwindcss">
-  @theme {
-    /* DESIGN.md tokens */
-  }
-</style>
-```
+- `@custom-variant dark (&:is(.dark *));`
+- `:root { … }` light tokens and `.dark { … }` dark overrides as CSS custom properties;
+- `@theme inline { --color-*: var(--*); … }` to expose the tokens as utilities;
+- `@layer base { *{ @apply border-border outline-ring/50; } body{ @apply bg-background text-foreground; } }`.
 
-Use CSS custom properties for values that should also be available to plain CSS or JavaScript.
+A [tweakcn](https://tweakcn.com) export pastes in directly. Ship both light and dark, toggling the `.dark` class with an anti-flash script placed before the Tailwind runtime. Never write the tailwindcss `@import` directive in this block — not even in a comment — its literal text silently breaks the browser CDN build.
+
+Read `references/design-tokens.md` and start from `templates/index.html`.
 
 ### Interaction scope
 
@@ -417,6 +426,8 @@ Stop after the three-file prototype is complete. Do not migrate it into Next.js,
 
 # Hard rules
 
+- Keep this skill's own instructions in English, but respond to the user, ask questions, and write prototype copy in the user's language.
+- Delegate independent research and inspection to parallel subagents when the host supports them.
 - Ask only unanswered, concrete questions.
 - Do not code before the question and design-selection gates are resolved.
 - Default to one self-contained `index.html`.

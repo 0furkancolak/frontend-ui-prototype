@@ -118,3 +118,4 @@ echo
 echo "Claude Code invocation: /frontend-ui-prototype"
 echo "Codex invocation: \$frontend-ui-prototype"
 echo "If a newly created top-level skills directory is not detected, restart the client."
+echo "Codex Agent Skills need a recent Codex CLI; check with 'codex --help' or /skills if not detected."

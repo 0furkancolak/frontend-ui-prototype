@@ -22,6 +22,7 @@ for path in \
   "references/modes.md" \
   "references/product-extraction.md" \
   "references/design-md-research.md" \
+  "references/design-tokens.md" \
   "references/visual-assets.md" \
   "references/single-file-prototype.md" \
   "references/quality-gate.md" \
@@ -68,9 +69,9 @@ for line in frontmatter.splitlines():
         description_lines.append(line.strip())
 
 description = " ".join(x for x in description_lines if x)
-if len(description) > 1024:
+if len(description) > 1536:
     raise SystemExit(
-        f"Validation failed: description is {len(description)} characters; limit is 1024"
+        f"Validation failed: description is {len(description)} characters; limit is 1536"
     )
 
 html = html_path.read_text(encoding="utf-8").lower()

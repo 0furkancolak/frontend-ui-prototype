@@ -4,19 +4,24 @@
 
 ```html
 <!doctype html>
-<html lang="tr">
+<html lang="[content language]">
   <head>
-    <!-- metadata, fonts, Tailwind browser CDN, optional pinned dependencies -->
-    <style type="text/tailwindcss">/* theme + utilities */</style>
-    <style>/* non-Tailwind CSS and fallbacks */</style>
+    <!-- metadata; anti-flash .dark script BEFORE the Tailwind runtime -->
+    <!-- Tailwind browser CDN; optional pinned fonts and dependencies -->
+    <style type="text/tailwindcss">
+      /* @custom-variant dark; :root + .dark tokens; @theme inline; @layer base */
+    </style>
+    <style>/* reduced-motion and non-Tailwind fallbacks */</style>
   </head>
   <body>
-    <!-- semantic page -->
-    <script>/* small vanilla interactions */</script>
+    <!-- semantic page using token utilities: bg-background, text-foreground, ... -->
+    <script>/* small vanilla interactions and theme toggle */</script>
     <script type="module">/* optional pinned Motion imports */</script>
   </body>
 </html>
 ```
+
+Theme with the shadcn/tweakcn token contract; see `references/design-tokens.md`.
 
 ## Dependency decision
 
