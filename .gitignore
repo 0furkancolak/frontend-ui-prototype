@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# make package / clean artifacts
+.tmp/
+*.zip
+
+# Editor / OS
+*.swp
+*~
+.idea/
+.vscode/

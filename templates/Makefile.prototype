@@ -1,0 +1,35 @@
+SHELL := /bin/bash
+PORT ?= 4173
+PYTHON ?= python3
+URL := http://localhost:$(PORT)
+
+.PHONY: serve open check design-lint clean reset
+
+serve:
+	@echo "Serving prototype at $(URL)"
+	@$(PYTHON) -m http.server $(PORT)
+
+open:
+	@if command -v open >/dev/null 2>&1; then open "$(URL)"; \
+	elif command -v xdg-open >/dev/null 2>&1; then xdg-open "$(URL)"; \
+	else echo "Open $(URL) in your browser"; fi
+
+check:
+	@test -f index.html || (echo "index.html missing" && exit 1)
+	@test -f DESIGN.md || (echo "DESIGN.md missing" && exit 1)
+	@grep -qi '<!doctype html>' index.html || (echo "doctype missing" && exit 1)
+	@grep -qi 'name="viewport"' index.html || (echo "viewport meta missing" && exit 1)
+	@grep -q '@tailwindcss/browser@4' index.html || (echo "Tailwind browser CDN missing" && exit 1)
+	@if grep -Eq '@latest|/latest/' index.html; then echo "Unpinned CDN dependency found"; exit 1; fi
+	@echo "Basic prototype checks passed."
+
+design-lint:
+	@npx -y @google/design.md lint DESIGN.md
+
+clean:
+	@rm -rf .screenshots .tmp .cache
+	@find . -maxdepth 1 -type f \( -name '*.log' -o -name '.DS_Store' \) -delete
+	@echo "Prototype temporary files removed."
+
+reset: clean
+	@echo "Prototype reset to the three source files: index.html, DESIGN.md, Makefile"

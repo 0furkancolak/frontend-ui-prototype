@@ -1,0 +1,7 @@
+interface:
+  display_name: "Frontend UI Prototype"
+  short_description: "Question-led DESIGN.md research and single-file UI prototypes"
+  default_prompt: "Use $frontend-ui-prototype to ask the missing product questions, research and select a DESIGN.md direction, then create and browser-verify a single index.html prototype with a Makefile. Stop before production implementation."
+
+policy:
+  allow_implicit_invocation: true
