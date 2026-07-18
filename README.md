@@ -8,16 +8,17 @@ The skill's instructions are written in English so it can be installed globally,
 
 ## Default output
 
-The skill does not scaffold a framework project. The default prototype output is only:
+The skill does not scaffold a framework project. The default prototype output is:
 
 ```text
 prototype/<slug>/
 ├── index.html
 ├── DESIGN.md
-└── Makefile
+├── Makefile
+└── assets/             # only when raster visuals are used
 ```
 
-- All HTML, CSS, JavaScript, mock data, and inline SVG live in a single `index.html`.
+- All HTML, CSS, JavaScript, mock data, and inline SVG live in a single `index.html`; selected raster visuals are downloaded into `assets/` and referenced locally (never base64 or remote hotlinks).
 - Tailwind CSS is loaded from the browser CDN.
 - Theming uses the shadcn/tweakcn token contract (`:root`/`.dark` + `@theme inline`), so a [tweakcn](https://tweakcn.com) export drops in directly, with light/dark support.
 - Lucide, Alpine.js, or Motion are added only when genuinely needed, with pinned versions.

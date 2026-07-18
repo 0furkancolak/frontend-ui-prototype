@@ -1,6 +1,6 @@
 ---
 name: frontend-ui-prototype
-description: Build a question-driven, browser-testable frontend prototype as one self-contained index.html using CDN-loaded libraries. Use when turning a product idea, existing app, repository, screenshot, or live URL into a landing page or UI prototype before production implementation. Inspect product truth, ask concrete intake questions, research and select a suitable DESIGN.md direction, decide how real screenshots, photography, generated imagery, or illustration should be used, then create index.html, DESIGN.md, and a Makefile and verify the result at desktop and mobile widths. Do not use for production application architecture, backend work, or pixel-perfect cloning.
+description: Build a question-driven, browser-testable frontend prototype with a single index.html and locally downloaded raster assets. Use when turning a product idea, existing app, repository, screenshot, or live URL into a landing page or UI prototype before production implementation. Inspect product truth, ask concrete intake questions, research and select a suitable DESIGN.md direction, decide how real screenshots, photography, generated imagery, or illustration should be used, then create index.html, DESIGN.md, a Makefile, and any needed assets, and verify the result at desktop and mobile widths. Do not use for production application architecture, backend work, or pixel-perfect cloning.
 ---
 
 # Frontend UI Prototype
@@ -13,7 +13,8 @@ The default implementation is intentionally simple:
 prototype/<slug>/
 ├── index.html
 ├── DESIGN.md
-└── Makefile
+├── Makefile
+└── assets/             # only when raster visuals are used
 ```
 
 All page markup, styles, interactions, inline SVG, and prototype data belong in `index.html`. Do not create `src/`, `components/`, `package.json`, framework scaffolding, build configuration, or separate CSS/JS files unless the user explicitly requests a different delivery format.
@@ -25,7 +26,7 @@ All page markup, styles, interactions, inline SVG, and prototype data belong in 
 3. Research current references and appropriate `DESIGN.md` systems before coding.
 4. Let the user select a design direction, unless they explicitly delegate the choice.
 5. Decide the visual-evidence strategy: real product UI, photography, generated imagery, illustration, or no hero image.
-6. Build one responsive `index.html` using CDN dependencies only when necessary.
+6. Build one responsive `index.html` using CDN dependencies only when necessary; store any raster assets as downloaded local files alongside the prototype.
 7. Include a prototype `Makefile` with zero-install local serving and validation commands.
 8. Render and review the prototype at desktop and mobile widths.
 9. Stop after prototype handoff. Do not silently turn it into production code.
@@ -182,7 +183,7 @@ npx -y @google/design.md lint DESIGN.md
 
 ### 3.2 Search the web
 
-Use current web research. Start from:
+Use current web research, but keep it targeted: inspect two or three credible alternative products or references that solve the same user problem, then stop once a defensible direction is clear. Start from:
 
 - the official Google `DESIGN.md` specification for file structure and token rules;
 - one or more current `DESIGN.md` libraries or catalogs;
@@ -263,13 +264,14 @@ Use illustration when it:
 
 Do not use illustration merely to fill space.
 
-In strict single-file mode:
+For raster visuals:
 
-- use remote, stable, licensed image URLs during prototyping; or
-- embed raster assets as data URLs when portability matters;
-- use inline SVG only for simple original diagrams or decorative marks;
-- do not create separate local image files by default;
-- if embedded assets would make `index.html` impractically large, ask before creating an `assets/` directory.
+- download selected, stable, licensed image files into `prototype/<slug>/assets/` and reference them with relative paths;
+- never embed or generate base64/data-URL raster images, even when portability would be convenient;
+- never hotlink remote images in the finished prototype;
+- use inline SVG only for simple original diagrams or decorative marks; use a coherent, established icon set only when an icon improves comprehension;
+- keep visual choices purposeful: imagery should establish product, place, people, or a workflow; icons should clarify an action, state, or label rather than decorate empty space;
+- avoid excessive image searches and downloads—select only the few assets needed to support the chosen visual thesis.
 
 Never:
 
@@ -303,6 +305,7 @@ The page must be valid semantic HTML and contain:
 - all CSS in inline `<style>` blocks;
 - all JavaScript in inline `<script>` blocks;
 - all prototype content and mock data inline;
+- local raster image references must point to files in `assets/`, never base64/data URLs;
 - accessible labels, focus states, and keyboard behavior;
 - responsive layout without horizontal overflow;
 - reduced-motion handling.
@@ -319,7 +322,7 @@ Use the fewest dependencies necessary.
 
 Tailwind's browser CDN is acceptable because this artifact is a prototype, not production.
 
-**Icons:** Use Lucide only when icons improve comprehension. Resolve the current stable version from official documentation and pin it. Initialize icons after the DOM loads.
+**Icons:** Use one consistent icon family (Lucide by default) only when icons improve comprehension. Resolve the current stable version from official documentation and pin it. Initialize icons after the DOM loads. Do not mix icon styles, use emoji as UI icons, or add decorative icon clouds.
 
 **Interaction:** Prefer vanilla JavaScript. Use Alpine.js only when several stateful interactions would otherwise create excessive imperative code. Pin the current stable version.
 
@@ -378,7 +381,9 @@ Required targets:
 - `make check` — verify required files and basic HTML structure;
 - `make design-lint` — validate `DESIGN.md` through `npx -y @google/design.md`;
 - `make clean` — remove only generated screenshots, temporary files, and local caches;
-- `make reset` — run clean and return the prototype folder to its committed three-file state.
+- `make reset` — run clean and return the prototype folder to its source state.
+
+When the prototype uses downloaded visuals, `assets/` is part of the deliverable and must not be removed by `make clean` or `make reset`.
 
 The Makefile must not run `npm install`, create `node_modules`, or require a package manager for `make serve`.
 
@@ -422,7 +427,7 @@ Report:
 7. known prototype limitations;
 8. the next production decision, without implementing it.
 
-Stop after the three-file prototype is complete. Do not migrate it into Next.js, React, Tailwind build tooling, or production routes unless the user explicitly requests that as a separate task.
+Stop after the prototype files, including any required local assets, are complete. Do not migrate it into Next.js, React, Tailwind build tooling, or production routes unless the user explicitly requests that as a separate task.
 
 # Hard rules
 
@@ -437,6 +442,9 @@ Stop after the three-file prototype is complete. Do not migrate it into Next.js,
 - A `Makefile` is required.
 - Existing products are the source of truth for features, terminology, and screenshots.
 - Real product screens outrank fake dashboards and generic illustration.
+- Download raster visuals into the prototype's `assets/` directory and use relative paths; never use base64/data URLs or finished-prototype image hotlinks.
+- Research a small set of relevant alternative products before choosing the direction; optimize research and output for signal, not token volume.
+- Aim for modern, airy interfaces with deliberate whitespace, clear hierarchy, and restrained decoration; density may increase only where the product task requires it.
 - Do not invent proof, metrics, customers, testimonials, or capabilities.
 - Do not silently cross the prototype-to-production boundary.
 

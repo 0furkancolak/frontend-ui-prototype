@@ -28,6 +28,10 @@ Use for a specific art direction that cannot be sourced. Clearly distinguish gen
 
 Use to explain abstraction or create a coherent brand world. Define a repeatable system: geometry, line weight, palette, texture, depth, character rules, and motion behavior.
 
-## Single-file delivery
+## Asset delivery
 
-Prefer stable external URLs or data URLs. Ask before adding a local `assets/` directory. Keep image weight reasonable and preserve aspect ratios.
+Download selected raster assets into `prototype/<slug>/assets/` and reference them with relative paths. Never use base64/data URLs or hotlink remote images in the finished prototype. Keep image weight reasonable, preserve aspect ratios, and retain only assets that support the visual thesis.
+
+## Icons
+
+Use one consistent, established icon family only when it clarifies an action, state, or label. Do not mix styles, substitute emoji for interface icons, or use icons as empty decoration.

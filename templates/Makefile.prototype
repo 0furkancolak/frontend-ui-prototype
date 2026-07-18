@@ -32,4 +32,4 @@ clean:
 	@echo "Prototype temporary files removed."
 
 reset: clean
-	@echo "Prototype reset to the three source files: index.html, DESIGN.md, Makefile"
+	@echo "Prototype reset; source files and any assets/ directory are preserved."
